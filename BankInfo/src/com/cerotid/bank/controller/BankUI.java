@@ -2,6 +2,8 @@ package com.cerotid.bank.controller;
 
 import java.util.Scanner;
 
+import com.cerotid.bank.model.*;
+
 public class BankUI {
 	private BankBO bankInterface;
 
@@ -85,13 +87,33 @@ public class BankUI {
 	}
 
 	private void addCustomer() {
-		// TODO Auto-generated method stub
+		System.out.println("Enter the Customer first Name");
+		String firstName = getScannerInstance().next();
+		System.out.println("Enter the Customer Last Name");
+		String lastName = getScannerInstance().next();
+		System.out.println("Enter the Customer SSN");
+		String ssn = getScannerInstance().next();
+		Address custAddress = getAddress();
+		Customer cust = new Customer(firstName,lastName,null,ssn,custAddress); //need to fix the null one
+		bankInterface.addCustomer(cust);
 
 	}
 
 	private void addCustomerAccount() {
 		// TODO Auto-generated method stub
 
+	}
+	private Address getAddress() {
+		System.out.println("Enter the Customer streetName");
+		String streetName = getScannerInstance().next();
+		System.out.println("Enter the Customer zipCode");
+		String zipCode = getScannerInstance().next();
+		System.out.println("Enter the Customer city");
+		String City = getScannerInstance().next();
+		System.out.println("Enter the Customer StateCode");
+		String stateCode = getScannerInstance().next();
+		return new Address(streetName,zipCode,City,stateCode);
+		
 	}
 
 	public static Scanner getScannerInstance() {
