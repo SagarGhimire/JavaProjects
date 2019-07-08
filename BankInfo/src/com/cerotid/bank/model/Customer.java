@@ -9,14 +9,14 @@ public class Customer {
 	private String ssn;
 	private Address address;
 
-	public Customer(String firstName, String lastName, ArrayList<Account> accounts, String ssn, Address address) {
+	public Customer(String firstName, String lastName, String ssn, Address address) {
+		super();
 		this.firstName = firstName;
 		this.lastName = lastName;
-		this.accounts = accounts;
 		this.ssn = ssn;
 		this.address = address;
+		this.accounts = new ArrayList<>();
 	}
-
 	public String getFirstName() {
 		return firstName;
 	}
@@ -58,9 +58,7 @@ public class Customer {
 	}
 
 	public void printCustomerAccounts() {
-		for (Account a : getAccounts()) {
-			System.out.println(a + " ");
-		}
+		accounts.forEach(x->System.out.println(x));
 	}
 
 	public void printCustomerDetails() {
@@ -74,19 +72,9 @@ public class Customer {
 	}
 
 	// Check It
-	public void addAccount(Account account) {
+	public ArrayList<Account> addAccount(Account account) {
 		this.accounts.add(account);
-		// TODO Auto-generated method stub
-	}
-
-	public Customer getCustAddress(Customer c, String state) {
-		if (c.getAddress().getStateCode().equals(state)) {
-			return c;
-		} else {
-			// System.out.println("No Customer found for the given State Code");
-			return null;
-		}
-
+		return accounts;
 	}
 
 }

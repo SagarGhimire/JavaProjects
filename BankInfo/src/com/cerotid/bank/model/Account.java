@@ -3,11 +3,21 @@ package com.cerotid.bank.model;
 import java.util.Date;
 
 public class Account {
-	private AccountType AccountType;
+	private AccountType accountType;
 	private  Date accountOpenDate;
 	private Date accountCloseDate;
 	private double amount;
+	private long accountNumber;
 	
+	
+	public Account(AccountType accountType, Date accountOpenDate,double amount, long accountNumber) {
+		this.accountType = accountType;
+		this.accountOpenDate = accountOpenDate;
+		//this.accountCloseDate = accountCloseDate;
+		this.amount = amount;
+		this.accountNumber = accountNumber;
+	}
+
 	public Date getAccountOpenDate() {
 		return accountOpenDate;
 	}
@@ -32,22 +42,20 @@ public class Account {
 		this.amount = amount;
 	}
 
-	public int getAccountNumber() {
+	public long getAccountNumber() {
 		return accountNumber;
 	}
 
-	public void setAccountNumber(int accountNumber) {
+	public void setAccountNumber(long accountNumber) {
 		this.accountNumber = accountNumber;
 	}
 
-	private int accountNumber;
-
 	public AccountType getAccountType() {
-		return AccountType;
+		return accountType;
 	}
 
 	public void setAccountType(AccountType accountType) {
-		AccountType = accountType;
+		this.accountType = accountType;
 	}
 	
 	public void printAccountInfo() {
@@ -57,11 +65,12 @@ public class Account {
 	
     @Override
 	public String toString() {
-		return "Account [AccountType=" + AccountType + ", accountOpenDate=" + accountOpenDate + ", accountCloseDate="
+		return "Account [AccountType=" + this.accountType + ", accountOpenDate=" + accountOpenDate + ", accountCloseDate="
 				+ accountCloseDate + ", amount=" + amount + ", accountNumber=" + accountNumber + "]";
 	}
 
 	public void sendMoney() {
+		//TODO
     	
     }
 

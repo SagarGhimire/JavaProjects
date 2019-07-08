@@ -1,6 +1,7 @@
 package com.cerotid.bank.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import com.cerotid.bank.model.Account;
@@ -9,13 +10,15 @@ import com.cerotid.bank.model.*;
 
 public class BankBOImpl implements BankBO {
 	private static Bank bank;
+	private static HashMap<Customer, String> custMapper;
 	static {
 		bank = new Bank();
+		custMapper = new HashMap<Customer, String>();
 	}
 
 	@Override
 	public void addCustomer(Customer customer) {
-		// TODO Auto-generated method stub
+		custMapper.put(customer, customer.getAddress().getStateCode());
 		bank.getCustomers().add(customer);
 
 	}
@@ -66,15 +69,14 @@ public class BankBOImpl implements BankBO {
 
 	@Override
 	public void serializeBank() {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public List<Customer> getCustomersByState(String StateCode) {
-		ArrayList<Customer> custList = null;
-		for (Customer c : bank.getCustomers()) {
-			if (c.getCustAddress(c, StateCode) != null) { //Checkthis one
+		ArrayList<Customer> custList = new ArrayList<>();
+		for (Customer c : custMapper.keySet()) {
+			if (custMapper.get(c).equals(StateCode)) {
 				custList.add(c);
 			}
 		}

@@ -1,6 +1,11 @@
 package com.cerotid.bank.controller;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Random;
 import java.util.Scanner;
+import java.util.UUID;
 
 import com.cerotid.bank.model.*;
 
@@ -31,9 +36,9 @@ public class BankUI {
 	}
 
 	private void performMenuAction() {
-	try {
-		int choice = getScannerInstance().nextInt();
-		
+		try {
+			int choice = getScannerInstance().nextInt();
+
 			switch (choice) {
 			case 1:
 				addCustomer();
@@ -67,15 +72,17 @@ public class BankUI {
 
 	private void printCustomersByState() {
 		try {
-		System.out.println("Enter the stateCode for the list of customers");
-		String stateCode = getScannerInstance().next();
-		if(bankInterface.getCustomersByState(stateCode)==null) {
-			System.out.println("No Customer exists for the given StateCode");
-		}
-		else
-			bankInterface.getCustomersByState(stateCode);
-		}
-		catch(Exception e) {
+			System.out.println("Enter the stateCode for the list of customers");
+			String stateCode = getScannerInstance().next();
+			List<Customer> customers = new ArrayList<Customer>();
+			customers = bankInterface.getCustomersByState(stateCode);
+			if (customers == null) {
+				System.out.println("No Customer exists for the given StateCode");
+			} else {
+				for (Customer c : customers)
+					System.out.println(c);
+			}
+		} catch (Exception e) {
 			System.out.println("Please Enter valid String Value");
 		}
 
@@ -94,15 +101,78 @@ public class BankUI {
 		System.out.println("Enter the Customer SSN");
 		String ssn = getScannerInstance().next();
 		Address custAddress = getAddress();
-		Customer cust = new Customer(firstName,lastName,null,ssn,custAddress); //need to fix the null one
+		Customer cust = new Customer(firstName, lastName, ssn, custAddress);
 		bankInterface.addCustomer(cust);
 
 	}
 
-	private void addCustomerAccount() {
-		// TODO Auto-generated method stub
+	public void addCustomerAccount() {
+		try {
+			Customer cust = getCustomerInfo();
+			if (cust != null) {
+				Account account = new Account(getCustomerAccountType(), new Date(), getOpeningBalance(),
+						getAccountNumber());
+				cust.addAccount(account);
+			} else {
+				System.out.println("No Customer found for the given SSN");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 	}
+
+	private long getAccountNumber() {
+		Random rand = new Random();
+		long x = (long) (rand.nextDouble() * 10000000000000000L);
+		return x;
+	}
+
+	private double getOpeningBalance() {
+		Scanner val = getScannerInstance();
+		System.out.println("Please Enter the opening balance for the account ");
+		double balance = val.nextDouble();
+		return balance;
+
+	}
+
+	private AccountType getCustomerAccountType() {
+		System.out.println("Please Enter Integer for Account Type from below: ");
+		System.out.println("1. Checking");
+		System.out.println("2. Saving");
+		System.out.println("3. Business_Checking");
+		AccountType accountType = AccountType.Checking; // bydefault
+		try {
+			int choice = getScannerInstance().nextInt();
+			switch (choice) {
+			case 1:
+				System.out.println("Checking selected");
+				accountType = AccountType.Checking;
+				break;
+			case 2:
+				accountType = AccountType.Saving;
+				break;
+			case 3:
+				accountType = AccountType.Business_Checking;
+				break;
+
+			default:
+				System.out.println("Please Enter valid Integer");
+				break;
+			}
+		} catch (Exception e) {
+			System.out.println("You have got the following exception " + e);
+		}
+		System.out.println("Account Type at end " + accountType);
+		return accountType;
+	}
+
+	private Customer getCustomerInfo() {
+		System.out.println("Enter the customer SSN for Account Info ");
+		String ssn = getScannerInstance().next();
+		return bankInterface.getCustomerInfo(ssn);
+	}
+
 	private Address getAddress() {
 		System.out.println("Enter the Customer streetName");
 		String streetName = getScannerInstance().next();
@@ -112,8 +182,8 @@ public class BankUI {
 		String City = getScannerInstance().next();
 		System.out.println("Enter the Customer StateCode");
 		String stateCode = getScannerInstance().next();
-		return new Address(streetName,zipCode,City,stateCode);
-		
+		return new Address(streetName, zipCode, City, stateCode);
+
 	}
 
 	public static Scanner getScannerInstance() {
